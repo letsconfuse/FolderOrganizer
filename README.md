@@ -96,13 +96,10 @@ python gui.py
 ---
 
 
-
-
-
-
----
-
 ## 🧳 `FolderOrganizer.exe` – Portable Executable
+
+<img width="831" height="712" alt="00" src="https://github.com/user-attachments/assets/18073b1e-8404-4320-9b39-4816053da9b1" />
+
 
 A no-installation, click-to-run version of the folder organizer for quick use on any Windows machine.
 
