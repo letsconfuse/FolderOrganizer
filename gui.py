@@ -44,7 +44,7 @@ class FileOrganizerApp:
         self.browse_button.place(relx=0.5, y=175, anchor="n") 
 
         # Exception Path entry
-        self.exception_label = ttk.Label(self.frame, text="Enter file/folder to ignore:\n already ignore folder 'DoNotTouch'", font=("Courier", 12), anchor="center", justify="center")
+        self.exception_label = ttk.Label(self.frame, text="Enter file/folder to ignore:\n Already ignoring folder 'DoNotTouch'", font=("Courier", 12), anchor="center", justify="center")
         self.exception_label.place(relx=0.5, y=240, anchor="n")
 
         # Entry widget for exception input
@@ -169,3 +169,4 @@ if __name__ == "__main__":
     root = ttk.Window(themename="darkly")  # Dark theme for modern look
     app = FileOrganizerApp(root)
     root.mainloop()
+
