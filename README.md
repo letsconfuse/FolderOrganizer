@@ -1,194 +1,115 @@
-# Dummy File Generator & Folder Organizer
+# FolderOrganizer
 
+[![Python](https://img.shields.io/badge/python-3.6%2B-blue?style=flat-square)](https://www.python.org/)
 
-
-## 📁 Project Structure
-
-```
-📦 FolderOrganizer
-├── dummyGenerator.py          # Dummy file creator
-├── FolderOrganizer.exe        # Portable executable
-├── gui.py                     # GUI frontend for the organizer
-├── organizer.py               # Folder organizer
-└── README.md                  # Project documentation
-```
-
-
-This project contains three Python scripts to help with file organization, testing folder structures, and running the tool with a graphical interface:
-
-* `dummyGenerator.py`: A utility to generate a wide variety of dummy files across multiple categories (Images, Documents, Audio, etc.)
-* `organizer.py`: A powerful folder organizer that automatically sorts files into categorized folders based on file extensions.
-* `gui.py`: A graphical interface for launching and using the organizer functionality.
-
-A **portable executable** (`FolderOrganizer.exe`) is also included for quick use without needing Python installed.
+FolderOrganizer is a Python-based utility designed for automated file management and directory structuring. It provides a systematic approach to sorting files into categorized subdirectories based on their extensions, along with a utility for generating dummy datasets for testing purposes.
 
 ---
 
-## 📁 `dummyGenerator.py` – Dummy File Generator
+## Interface Overview
 
-Generates a comprehensive dataset of files for testing file organizers or backup tools.
+![FolderOrganizer Interface](https://github.com/user-attachments/assets/18073b1e-8404-4320-9b39-4816053da9b1)
 
-### ✅ Features:
+---
 
-* Generates dummy files for the following categories:
+## System Components
 
-  * Images, Documents, Audio, Videos, Archives
-  * Scripts, Executables, Fonts, Spreadsheets
-  * Presentations, Databases, Web Files, Miscellaneous
-* Each file contains placeholder content matching its type.
-* Random file names are used for realism.
-* Output files are stored in a user-specified directory.
+The project is structured into three primary modules, each serving a specific role in the file management workflow:
 
-### 📦 How to Use:
+### 1. File Organizer (organizer.py)
+The core logic responsible for scanning directories and relocating files based on extension-to-category mapping.
+* **Automated Categorization**: Supports sorting into 13 distinct categories including Images, Documents, Videos, and Archives.
+* **Protected Directories**: Automatically bypasses sensitive folders such as "DoNotTouch".
+* **Conflict Management**: Implements indexed naming for duplicate files to prevent data loss.
+* **Stand-alone Execution**: Optimized for both manual CLI execution and module integration.
+
+### 2. Dummy Data Generator (dummyGenerator.py)
+A utility for creating comprehensive test datasets with realistic file structures.
+* **Multi-Format Coverage**: Generates placeholder files for over 100 extensions.
+* **Realistic Simulation**: Uses randomized naming and type-specific placeholder content.
+* **Test Environment Preparation**: Designed for verifying backup systems and storage scripts.
+
+### 3. Graphical Interface (gui.py)
+A Tkinter-based frontend providing a streamlined user experience for the organization engine.
+* **Dir-Picker Integration**: Native OS file dialogs for directory selection.
+* **Execution Feedback**: Standardized logging for real-time progress monitoring.
+
+---
+
+## Technical Workflow
+
+```mermaid
+graph TD
+    A[Initialization] --> B{Execution Mode}
+    B -->|GUI| C[Select Target Directory via Dialog]
+    B -->|CLI| D[Define Path via Input]
+    C --> E[Iterate Directory Content]
+    D --> E
+    E --> F{Item Type?}
+    F -->|Directory| G[Check Exclusion Key 'DoNotTouch']
+    G -->|True| H[Bypass]
+    G -->|False| I[Continue Iteration]
+    F -->|File| J[Extract Extension]
+    J --> K{Category Mapping?}
+    K -->|Defined| L[Move to Category Subfolder]
+    K -->|Undefined| M[Move to 'Others']
+    L --> N[Log Transaction]
+    M --> N
+    N --> O[Completion]
+```
+
+---
+
+## Supported File Categories
+
+| Category | Extensions |
+| :--- | :--- |
+| **Images** | .png, .jpg, .webp, .svg, .psd, .ai, .tiff, .raw |
+| **Documents** | .pdf, .docx, .txt, .md, .epub, .xlsx, .pptx |
+| **Videos** | .mp4, .mkv, .avi, .mov, .flv, .webm |
+| **Audio** | .mp3, .wav, .flac, .aac, .m4a, .ogg |
+| **Archives** | .zip, .rar, .7z, .tar, .iso, .dmg |
+| **Scripts** | .py, .js, .html, .css, .cpp, .sh, .sql, .java |
+| **Executables**| .exe, .msi, .apk, .bat, .deb, .bin |
+| **Spreadsheets**| .xlsx, .csv, .ods, .xls, .xlsm |
+
+> [!NOTE]
+> Extension mapping can be extended by modifying the `FILE_CATEGORIES` dictionary within `organizer.py`.
+
+---
+
+## Installation and Usage
+
+### Portable Version (Windows)
+1. Locate `FolderOrganizer.exe` in the project root.
+2. Launch the application.
+3. Input the target path when prompted to initiate organization.
+
+### Development Environment (Python)
+Requirements: Python 3.6 or higher.
 
 ```bash
+# Clone the repository
+git clone https://github.com/letsconfuse/FolderOrganizer.git
+
+# Launch the Graphical Interface
+python gui.py
+
+# Launch the Data Generator
 python dummyGenerator.py
 ```
 
-* You’ll be prompted to enter the destination folder path.
+---
+
+## Use Cases
+* **QA & Testing**: Efficient generation of mock data for automation suites.
+* **Disk Optimization**: Automating the maintenance of high-traffic folders (Downloads/Desktop).
+* **Workflow Automation**: Standardizing project structures for development teams.
 
 ---
 
-## 🗂️ `organizer.py` – Smart Folder Organizer
-
-Organizes cluttered directories by sorting files into folders based on file types and extensions.
-
-### ✅ Features:
-
-* Automatically organizes all files in the selected folder.
-* Files are sorted into meaningful folders such as:
-
-  * `Images`, `Documents`, `Videos`, `Scripts`, `Archives`, etc.
-* **Execution Queue**:
-
-  * Automatically logs all operations.
-  * Keeps an execution history for transparency.
-* **Skips Special Folder**:
-
-  * Ignores any folder named `nodottouch`, leaving its contents untouched.
-* Supports wide range of file extensions, including obscure or advanced types.
-* Can be run via Python or as a **portable executable** (`organizer.exe`) for non-Python users.
-* Robust error handling for read-only or locked files.
-
-
-
----
-
-## 🖼️ `gui.py` – Graphical Interface (GUI)
-
-A simple graphical interface built using `tkinter` for easier interaction with the organizer.
-
-### ✅ Features:
-
-* Allows users to browse and select a folder using a file dialog.
-* Provides buttons to trigger folder organization.
-* Displays status messages or alerts.
-* Runs the same organizing logic behind the scenes using `organizer.py`.
-
-### 📦 How to Use:
-
-```bash
-python gui.py
-```
-
-* A window will appear where you can select a folder and click to organize it.
-
----
-
-
-## 🧳 `FolderOrganizer.exe` – Portable Executable
-
-<img width="831" height="712" alt="00" src="https://github.com/user-attachments/assets/18073b1e-8404-4320-9b39-4816053da9b1" />
-
-
-A no-installation, click-to-run version of the folder organizer for quick use on any Windows machine.
-
-### ✅ Why Use the `.exe` Version?
-
-* **Zero setup**: No need to install Python or dependencies.
-* **Plug & play**: Run directly from a USB or external drive.
-* **Identical logic**: Performs exactly like `organizer.py`.
-* **Ideal for non-developers**: Simple double-click operation.
-
-### 💡 Features:
-
-* Organizes cluttered folders by file type (Images, Documents, Videos, Archives, Scripts, etc.).
-* Automatically creates subfolders and moves files accordingly.
-* Skips any folder named `DoNotTouch` to avoid touching sensitive contents.
-* Logs execution details for transparency.
-* Handles common issues like locked or read-only files gracefully.
-* Recognizes a wide range of common and uncommon file extensions.
-
-### 🚀 How to Use:
-
-1. **Locate** the `FolderOrganizer.exe` file in the root of the project.
-2. **Double-click** to launch it.
-3. A prompt will appear asking for the path to the folder you want to organize.
-4. The tool will sort files into structured folders within the selected directory.
-
-> 💼 *Great for QA testers, IT staff, or students needing fast and repeatable file cleanup without coding!*
-
----
-
-
-## 💼 Use Cases
-
-* Preparing test environments
-* Cleaning download folders
-* Organizing project directories
-* Demoing file sorters or automation tools
-
-
----
-
-## 📝 Notes
-
-* No sensitive data is included in generated or organized files.
-* Feel free to contribute by suggesting new file types or improving sorting logic.
-
----
-
-## 📜 License
-
-MIT License – Free to use and modify.
-
----
-
-## 🙌 Author
-
-Built with ❤️ to help QA testers, developers, and students automate boring file tasks.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## License
+Distributed under the MIT License. Refer to the `LICENSE` file for full terms.
+
+## Author
+**LetsConfuse** - [GitHub Profile](https://github.com/letsconfuse)
